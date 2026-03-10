@@ -1,0 +1,72 @@
+{
+  "name": "diagram-os",
+  "version": "0.1.0",
+  "description": "Technical diagram production and design system evolution agent",
+  "tools": [
+    {
+      "name": "analyze_diagram",
+      "description": "Analyze an existing diagram image and return structured JSON",
+      "input": {
+        "file_path": "string — path to diagram image",
+        "hint": "string (optional) — diagram type hint"
+      },
+      "output": {
+        "json_path": "string — path to output JSON",
+        "compliance_score": "number — 0-100",
+        "gaps": "array — design system gaps found"
+      }
+    },
+    {
+      "name": "assemble_diagram",
+      "description": "Produce a styled diagram from JSON, text, or mixed input",
+      "input": {
+        "input_type": "enum — json | text | image | mixed",
+        "content": "string — file path or inline text",
+        "diagram_type": "string (optional) — override diagram type"
+      },
+      "output": {
+        "tsx_path": "string — path to React component",
+        "json_path": "string — path to structured data",
+        "validation_report": "object — validator output"
+      }
+    },
+    {
+      "name": "evolve_system",
+      "description": "Propose or apply a change to the design system",
+      "input": {
+        "gap": "string — description of the gap or requirement",
+        "proposed_change": "string (optional)",
+        "apply": "boolean — true to apply, false to propose only"
+      },
+      "output": {
+        "proposal": "string",
+        "applied": "boolean",
+        "changelog_entry": "string"
+      }
+    },
+    {
+      "name": "validate_diagram",
+      "description": "Run pre-delivery QA on a diagram output",
+      "input": {
+        "tsx_path": "string — path to React component",
+        "json_path": "string (optional) — companion JSON"
+      },
+      "output": {
+        "passed": "boolean",
+        "score": "number — items passed / total",
+        "failures": "array",
+        "warnings": "array"
+      }
+    }
+  ],
+  "context": {
+    "design_system": "design-system/system.md",
+    "tokens":        "design-system/tokens.json",
+    "schema":        "inputs/schemas/diagram.schema.json"
+  },
+  "state_keys": {
+    "client_id":      "maps to client overlay skill if available",
+    "session_context":"prior diagrams produced in this engagement",
+    "domain":         "enum — telco | finserv | general"
+  }
+}
